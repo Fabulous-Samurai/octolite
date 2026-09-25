@@ -53,8 +53,8 @@ cmake --build build
 - `-DCHOICE=3` : **Benchmarks** - Stress-tests the raw allocation engine boundaries.
 - `-DCHOICE=5` : Compiles **All** executable targets simultaneously.
 
-## 🔮 Next-Gen: Moving towards Octapus 🐙
+## 🔮 Next-Gen: Moving towards Octulip 🐙
 
-Octolite serves as the foundational validation step for a more advanced, high-throughput memory engine named **Octapus**. 
+Octolite serves as the foundational validation step for a more advanced, memory supervisor module named **Octulip**. 
 
-While Octolite verifies the baseline multi-banking, **Octapus** scales this architecture into an **Octa-Pong** setup—featuring 8 synchronized slot groups utilizing a **3-Bank (Feed -> Grain -> Harvest)** state pipeline matrix (24 independent memory pools total) to eliminate all thread synchronization stalls between Input, Compute, and Vulkan Presentation pipelines.
+While Octolite verifies the baseline multi-banking, **Octulip** scales this architecture into an **Octa-Pong** setup—featuring 8 synchronized slot groups utilizing a **3-Bank (Feed -> Grain -> Harvest)** state pipeline matrix (24 independent memory pools total) to eliminate all thread synchronization stalls between Input, Compute, and Vulkan Presentation pipelines.
