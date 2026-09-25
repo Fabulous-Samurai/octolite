@@ -1,0 +1,50 @@
+#version 450
+
+layout(local_size_x = 64) in;
+
+layout(set = 0, binding = 0) buffer ChunkData {
+    vec4 lanes[];
+} chunks;
+
+layout(push_constant) uniform PC {
+    float dt;
+    uint chunk_count;
+} pc;
+
+void main() {
+    // AoSoA layout: her chunk 16 vec4 = 64 lane * 4 byte
+    //   lanes[0..3]  : pos_x, pos_y, pos_z, vel_x
+    //   lanes[4..7]  : vel_y, vel_z, unused, unused
+    //   ...
+    // Gerçekte sizin layout'a göre ayarlayın; asagidaki basit entegrasyon.
+    uint chunk_id = gl_WorkGroupID.x;
+    if (chunk_id >= pc.chunk_count) return;
+    uint lane = gl_LocalInvocationID.x;
+    if (lane >= 16) return;
+
+    uint base = chunk_id * 16u;
+
+    vec3 pos = vec3(
+        chunks.lanes[base + 0u][lane],
+        chunks.lanes[base + 1u][lane],
+        chunks.lanes[base + 2u][lane]
+    );
+    vec3 vel = vec3(
+        chunks.lanes[base + 3u][lane],
+        chunks.lanes[base + 4u][lane],
+        chunks.lanes[base + 5u][lane]
+    );
+
+    // Simple Euler integration
+    pos += vel * pc.dt;
+
+    // Damping (optional)
+    vel *= 0.995;
+
+    chunks.lanes[base + 0u][lane] = pos.x;
+    chunks.lanes[base + 1u][lane] = pos.y;
+    chunks.lanes[base + 2u][lane] = pos.z;
+    chunks.lanes[base + 3u][lane] = vel.x;
+    chunks.lanes[base + 4u][lane] = vel.y;
+    chunks.lanes[base + 5u][lane] = vel.z;
+}

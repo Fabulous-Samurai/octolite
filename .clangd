@@ -1,0 +1,36 @@
+# Octolite clangd config - MSYS2 UCRT64 / MinGW-w64 / GCC 16.2.0
+CompileFlags:
+  Add:
+    - --target=x86_64-w64-mingw32
+    - -std=gnu++26
+    - -IC:/octolite/include
+    # --- libstdc++ (GCC 16.2.0) ---
+    - -isystemC:/msys64/ucrt64/include/c++/16.2.0
+    - -isystemC:/msys64/ucrt64/include/c++/16.2.0/x86_64-w64-mingw32
+    - -isystemC:/msys64/ucrt64/include/c++/16.2.0/backward
+    # --- GCC internal headers ---
+    - -isystemC:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include
+    - -isystemC:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include-fixed
+    # --- MinGW-w64 / UCRT (windows.h, winbase.h, vulkan/) ---
+    - -isystemC:/msys64/ucrt64/include
+    # --- Proje define'lari ---
+    - -DUNICODE
+    - -D_UNICODE
+    - -DNOMINMAX
+    - -DWIN32_LEAN_AND_MEAN
+    - -DOCTOLITE_ENABLE_GPU=1
+    - -Wno-unknown-attributes
+  Remove:
+    - -fmodules-ts
+    - -fmodule-mapper=*
+    - -fdeps-format=*
+    - -Winvalid-pch
+    - -include=*
+    - -fdiagnostics-color=*
+Diagnostics:
+  Suppress:
+    - pp_file_not_found_angled_include_not_fatal
+    - builtin_definition          # <- MinGW'nin __rdtsc tanimi icin
+  UnusedIncludes: None
+Index:
+  Background: Build
